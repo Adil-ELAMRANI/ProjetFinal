@@ -9,7 +9,7 @@
 
 <div class="flex flex-col gap-1">
     @if($label)
-        <label for="{{ $name }}" class="text-sm font-medium text-text-heading">
+        <label for="{{ $name }}" class="text-sm font-medium text-text-muted">
             {{ $label }}
         </label>
     @endif
@@ -24,14 +24,15 @@
 
         class="
             w-full
-            rounded-md
+            rounded-lg
             px-3 py-2
             outline-none
             bg-card
             text-text-body
             border
-            {{ $errors->has($name) ? 'border-red-500 bg-red-50' : 'border-base' }}
-            focus:border-primary
+            {{ $errors->has($name) ? 'border-red-500 bg-red-50' : 'border-muted' }}
+            focus:ring-color-focus
+            focus:ring-1
         "
     >
 
