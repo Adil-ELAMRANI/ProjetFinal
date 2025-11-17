@@ -3,7 +3,7 @@
 
     <x-input 
         label="Nom d'utilisateur"
-        name="username"
+        name="name"
         type="text"
         placeholder="Entrez votre nom d'utilisateur"
         required
