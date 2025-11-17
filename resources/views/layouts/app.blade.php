@@ -21,7 +21,8 @@
     </head>
     <body>
         <x-header :logoPath='asset("images/logo_vino.png")' />
-        <main class="bg-[var(--bg-body)] h-100">
+        {{-- Height fixer temporaire --}}
+        <main class="bg-body" style="min-height: 150vh;">
             @yield('content')
         </main>
         <x-navigation />
