@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CellierController;
 
-Route::get('/', function () {
-    return view('auth');
-});
+// Route::get('/', function () {
+//     return view('catalogue.index');
+// });
 
 
 // Formulaires
@@ -23,5 +23,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 /// Routes protégées par auth 
 Route::middleware('auth')->group(function () {
     // Route::get('/celliers', [CellierController::class, 'index'])->name('celliers.index');
-    
+
 });
