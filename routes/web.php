@@ -4,28 +4,24 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CellierController;
 
-Route::get('/', function () {
-    return view('welcome');
+// Routes accessibles seulement aux invités (non connectés)
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
 });
 
-Route::get('/', function () {
-    return view('accueil');
-});
+// Déconnexion : seulement si connecté
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
-
-// Formulaires
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
-
-// Traitement des formulaires
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-
-// Déconnexion
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-/// Routes protégées par auth 
+// Routes protégées : seulement accessibles si la session est ouverte
 Route::middleware('auth')->group(function () {
-    // Route::get('/celliers', [CellierController::class, 'index'])->name('celliers.index');
-    
+    // Page principale après login/inscription
+    Route::get('/celliers', [CellierController::class, 'index'])->name('celliers.index');
+
+    // plus tard tu pourras ajouter d’autres routes protégées ici
 });
