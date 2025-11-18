@@ -21,9 +21,10 @@
     </head>
     <body class="bg-body">
         <x-header :logoPath='asset("images/logo_vino.png")' />
-        <main class="bg-body">
+        <main class="bg-body mb-30">
             @yield('content')
         </main>
+        {{-- Envoie quelle bouton a afficher sur la page. Voir navigation.blade.php --}}
         <x-navigation 
             :addCellarBtn="$__env->hasSection('add-cellar-btn')" 
             :addWineBtn="$__env->hasSection('add-wine-btn')"

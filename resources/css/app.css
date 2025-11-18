@@ -41,6 +41,7 @@
     /* UI COLOR TOKENS (valid with utility classes) */
     --color-body: var(--color-neutral-300);
     --color-card: var(--color-neutral-100);
+    --color-card-hover: var(--color-neutral-300);
     --color-text-body: var(--color-neutral-800);
     --color-text-heading: var(--color-neutral-900);
     --color-muted: var(--color-neutral-600);
