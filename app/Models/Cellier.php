@@ -14,23 +14,16 @@ class Cellier extends Model
     // La table est correcte
     protected $table = 'celliers';
 
-<<<<<<< HEAD
     // Désactive les colonnes 'created_at' et 'updated_at' (selon le schéma bd_vino.pdf)
     public $timestamps = false; 
-=======
->>>>>>> cbb3bb4cc9bd0236d599492308c0b9a0c61ec03c
 
     // ✔ Garde les timestamps créés par Laravel
-    public $timestamps = true;
+    //public $timestamps = true;
 
     // ✔ Colonnes que tu peux remplir
     protected $fillable = [
         'nom',
-<<<<<<< HEAD
         'id_utilisateur',
-=======
-        'user_id',
->>>>>>> cbb3bb4cc9bd0236d599492308c0b9a0c61ec03c
     ];
 
     /**
