@@ -22,6 +22,7 @@
     }
 @endphp
 
+
 @if ($type === 'href')
     {{-- Génère un <a> --}}
     <a href="{{ $href }}"
