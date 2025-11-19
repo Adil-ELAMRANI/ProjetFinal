@@ -57,6 +57,7 @@
                                     <p><span class="font-medium text-text-body">Prix :</span> {{ number_format($bouteille->prix, 2, ',', ' ') }} $</p>
                                 @endif
                             </div>
+                                <x-delete-btn label="Supprimer la bouteille" route="{{ route('bouteilles.delete', ['cellier' => $cellier->id, 'bouteille' => $bouteille->id]) }}" />
                         </div>
                     @endforeach
                 </div>

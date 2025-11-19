@@ -48,4 +48,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/celliers/{cellier}/bouteilles/ajout', [BouteilleManuelleController::class, 'store'])
         ->name('bouteilles.manuelles.store');
+
+    // Suppression de bouteille dans un cellier
+    Route::delete('/celliers/{cellier}/bouteilles/{bouteille}', [CellierController::class, 'deleteBottle'])
+        ->name('bouteilles.delete');
 });
