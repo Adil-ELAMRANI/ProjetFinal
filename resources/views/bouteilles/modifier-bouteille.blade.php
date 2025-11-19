@@ -64,6 +64,7 @@
             <div class="pt-4 flex justify-end">
                 <x-primary-btn
                     label="Modifier la bouteille"
+                    type="submit"
                     id="btn-submit-bouteille"
                 />
             </div>
