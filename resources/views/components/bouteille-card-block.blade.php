@@ -1,4 +1,4 @@
-@props(['nom' => '', 'image' => null, 'prix' => ''])
+@props(['id' => '', 'nom' => '', 'image' => null, 'prix' => '', 'userId' => null])
 {{-- Carte de bouteille --}}
 <div class='flex flex-col justify-between bg-card rounded-lg shadow-md hover:shadow-sm transition-all duration-300 overflow-hidden'>
     
@@ -13,8 +13,8 @@
         <span class='truncate font-semibold text-text-title text-md'>{{ $nom }}</span>
         <span class='text-text-muted'>{{ $prix }} $</span>
         <span class="flex justify-end"> 
-            <x-primary-btn id="add-to-cellar-btn" rounded="lg" label="Ajouter" class="flex-1"/>
-            <input type=number id="quantity" name="quantity" min="1" max="10" value="1" class="w-16 ml-2"/>
+            <x-primary-btn  data-user-id="{{ $userId }}" data-bottle-id="{{ $id }}" rounded="lg" label="Ajouter" class="flex-1 add-to-cellar-btn "/>
+            <input type=number name="quantity" min="1" max="10" value="1" class="w-16 ml-2"/>
         </span>
     </div>
 </div>

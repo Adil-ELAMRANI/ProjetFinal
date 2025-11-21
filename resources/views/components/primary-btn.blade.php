@@ -4,6 +4,7 @@
     'route' => null,
     'rounded' => 'lg',
     'id' => null,
+    'data' => null,
 ])
 {{-- Bouton principal --}}
 @php
