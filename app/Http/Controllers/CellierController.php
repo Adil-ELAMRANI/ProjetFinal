@@ -239,6 +239,21 @@ class CellierController extends Controller
             ], 404);
         }
 
+        $bottleExist = Bouteille::where('cellier_id', $request->cellar_id)
+            ->where('nom', $catalogBottle->nom)
+            ->first();
+
+        if ($bottleExist) {
+            $bottleExist->quantite += $request->quantity;
+            $bottleExist->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Quantité augmentée',
+                'data' => $bottleExist
+            ]);
+        }
+
         // 2. Créer une copie dans la table "bouteilles"
         $new = new Bouteille();
         $new->cellier_id = $request->cellar_id;
@@ -248,7 +263,7 @@ class CellierController extends Controller
         $new->quantite = $request->quantity;
         $new->prix = $catalogBottle->prix;
 
-        $new->save(); // <-- INSERT dans la bonne BD
+        $new->save();
 
         return response()->json([
             'success' => true,
