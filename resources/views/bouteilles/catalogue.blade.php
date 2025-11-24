@@ -8,6 +8,9 @@
         <x-bouteille-card-block :id="$bouteille->id" :nom="$bouteille->nom" :image="$bouteille->image" :prix="$bouteille->prix" />
     @endforeach
 </div>
+<div class="mt-6">
+{{ $bouteilles->links('vendor.pagination.tailwind') }}
+</div>
 </section>
 <x-modal-pick-cellar />
 @section('content')

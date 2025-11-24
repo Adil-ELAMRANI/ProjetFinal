@@ -12,7 +12,8 @@ class CatalogueController extends Controller
         // Récupère les 10 dernières bouteilles importées avec leurs relations
         $bouteilles = BouteilleCatalogue::with(['pays', 'typeVin'])
             ->orderBy('date_import', 'desc')
-            ->get();
+            ->paginate(5);
+
 
         return view('bouteilles.catalogue', compact('bouteilles'));
     }
