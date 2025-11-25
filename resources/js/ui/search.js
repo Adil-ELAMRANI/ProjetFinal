@@ -73,13 +73,13 @@ function renderSuggestions(items) {
     });
 }
 
-// Debounced fetch function
+// Debounced fetch pour le catalogue
 const debouncedFetch = debounce(fetchCatalogue, 300);
 
-// Search input
+// Recherche
 searchInput.addEventListener("input", () => debouncedFetch());
 
-// Filters
+// Filtres
 paysFilter.addEventListener("change", () => debouncedFetch());
 typeFilter.addEventListener("change", () => debouncedFetch());
 
@@ -91,7 +91,7 @@ searchInput.addEventListener("input", function () {
         suggestionsBox.classList.add("hidden");
         return;
     }
-    // Clear previous timeout to debounce suggestions fetch
+    // Effacer le timeout précédent pour debounce des suggestions
     clearTimeout(suggestionTimeout);
 
     // Anti spam
@@ -122,5 +122,5 @@ function bindPaginationLinks() {
     });
 }
 
-// Bind on load
+// Lier les liens de pagination au chargement initial
 bindPaginationLinks();

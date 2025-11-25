@@ -12,7 +12,7 @@
         placeholder="Rechercher..." 
     />
     {{-- Boite de suggestions de recherche --}}
-    <div id="suggestionsBox" class="absolute left-0 right-0 bg-white border rounded-lg shadow-md hidden z-50 h-50 overflow-y-auto">
+    <div id="suggestionsBox" class="absolute left-0 right-0 bg-white border border-border-base rounded-lg shadow-md hidden z-50 h-50 overflow-y-auto">
     </div>
     </div>
     
