@@ -19,11 +19,16 @@ function fetchCatalogue(url = "/catalogue/search") {
         type: typeFilter.value,
     });
 
-    fetch(`${url}?${params.toString()}`)
+    // Construire l'URL finale avec les paramètres de requête
+    const finalUrl = url.includes("?")
+        ? `${url}&${params.toString()}`
+        : `${url}?${params.toString()}`;
+
+    fetch(finalUrl)
         .then((res) => res.json())
         .then((data) => {
             container.innerHTML = data.html;
-            
+
             // Re-bind pagination links for AJAX
             bindPaginationLinks();
         });
