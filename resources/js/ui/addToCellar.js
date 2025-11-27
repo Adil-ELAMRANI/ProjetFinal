@@ -7,18 +7,14 @@ if (boutonFermer && panneauCellier) {
     let celliersPrecharges = null;
     let idBouteilleActive = null;
     let quantiteActive = 1;
+    let chargementEnCours = false;
 
-    // Charge les celliers une seule fois
-    prechargerCelliers();
-
-    async function prechargerCelliers() {
-        celliersPrecharges = await obtenirCelliers();
-    }
-
+    // Précharger les celliers
+    obtenirCelliers().then((data) => (celliersPrecharges = data));
     boutonFermer.addEventListener("click", fermerPanneau);
 
     // Ouvrir le panneau quand on clique sur Ajouter
-    document.addEventListener("click", (e) => {
+    document.addEventListener("click", async (e) => {
         const bouton = e.target.closest(".add-to-cellar-btn");
         if (!bouton) return; // pas un bouton ajouter
         e.preventDefault();
@@ -33,21 +29,49 @@ if (boutonFermer && panneauCellier) {
                 formulaire.querySelector('input[name="quantity"]').value
             ) || 1;
 
-        ouvrirPanneau();
+        await ouvrirPanneau();
     });
 
+    // Ouvrir le panneau
     async function ouvrirPanneau() {
         panneauCellier.classList.remove("translate-y-full");
+        const listeCelliers = document.getElementById("cellar-list");
+
+        if (!celliersPrecharges) {
+            afficherChargement(listeCelliers);
+
+            if (!chargementEnCours) {
+                chargementEnCours = true;
+                celliersPrecharges = await obtenirCelliers();
+                chargementEnCours = false;
+            }
+        }
+
         peuplerOptionsCelliers(celliersPrecharges);
     }
 
+    // Fermer le panneau
     function fermerPanneau() {
         panneauCellier.classList.add("translate-y-full");
     }
 
     async function obtenirCelliers() {
-        const reponse = await fetch("/api/celliers");
+        const reponse = await fetch("/api/celliers", {
+            headers: {
+                Accept: "application/json",
+            },
+        });
         return reponse.json();
+    }
+
+
+    // Afficher un message de chargement
+    function afficherChargement(container) {
+        container.innerHTML = `
+            <div class="py-4 text-center text-gray-400 animate-pulse">
+                Chargement des celliers...
+            </div>
+        `;
     }
 
     function peuplerOptionsCelliers(celliers) {
@@ -86,14 +110,8 @@ if (boutonFermer && panneauCellier) {
 
     // Clique sur un cellier dans le panneau
     document.addEventListener("click", async (e) => {
-        console.log("test");
-
         const boite = e.target.closest(".cellar-box");
-        if (!boite) return;
-
-        // Ne prévenir le comportement par défaut que si c'est un cellar-box du modal (avec data-cellar-id)
-        // Cela permet aux liens cellar-box normaux de la page d'index de fonctionner normalement
-        if (!boite.dataset.cellarId) return;
+        if (!boite || !boite.dataset.cellarId) return;
 
         e.preventDefault();
 
@@ -109,7 +127,7 @@ if (boutonFermer && panneauCellier) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json", 
+                Accept: "application/json",
                 "X-CSRF-TOKEN": jetonCsrf,
             },
             body: JSON.stringify({
