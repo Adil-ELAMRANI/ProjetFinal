@@ -1,4 +1,8 @@
 <div
+    id="addWineOverlay"
+    class="fixed inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 z-40"
+></div>
+<div
     id="addWineBtnContainer"
     class="fixed z-50 bottom-0 left-0 w-full p-4 py-10 bg-card border border-border-base shadow-lg rounded-t-lg transform translate-y-full transition-transform duration-300"
 >
