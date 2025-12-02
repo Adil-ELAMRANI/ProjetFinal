@@ -3,19 +3,37 @@
 @section('title', 'Liste d’achat')
 
 @section('content')
-<h1 class="text-2xl font-bold mb-4">Ma liste d’achat</h1>
+<div class="p-4">
 
-@foreach ($items as $item)
-<div class="p-4 bg-card shadow rounded mb-3 flex justify-between">
-    <div>
-        <p>{{ $item->bouteilleCatalogue->nom }}</p>
-        <p>Quantité : {{ $item->quantite }}</p>
-    </div>
+    <h1 class="text-2xl font-bold text-center mb-6">Ma liste d’achat</h1>
 
-    <form method="POST" action="{{ route('liste_achat.destroy', $item) }}">
-        @csrf @method('DELETE')
-        <button class="text-red-500">Supprimer</button>
-    </form>
+    @if ($items->isEmpty())
+        <p class="text-center text-muted mt-20">
+            Votre liste d’achat est vide.<br>
+            Ajoutez des bouteilles depuis le catalogue ou vos celliers.
+        </p>
+    @endif
+
+    @foreach ($items as $item)
+        <div class="p-4 bg-card shadow rounded mb-3 flex justify-between items-center">
+            
+            <div>
+                <p class="font-semibold">{{ $item->bouteilleCatalogue->nom }}</p>
+                <p class="text-sm text-muted">Quantité : {{ $item->quantite }}</p>
+            </div>
+
+            <div class="flex items-center gap-3">
+                
+                {{-- Supprimer --}}
+                <form method="POST" action="{{ route('listeAchat.destroy', $item) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button class="text-red-600 font-bold">Supprimer</button>
+                </form>
+            </div>
+
+        </div>
+    @endforeach
+
 </div>
-@endforeach
 @endsection
