@@ -125,6 +125,15 @@ Route::middleware('auth')->group(function () {
     // Voir la liste d'achat
     Route::get('/liste-achat', [ListeAchatController::class, 'index'])
         ->name('listeAchat.index');
+
+    Route::post('/liste-achat', [ListeAchatController::class, 'store'])
+        ->name('listeAchat.store');
+
+    Route::put('/liste-achat/{item}', [ListeAchatController::class, 'update'])
+        ->name('listeAchat.update');
+
+    Route::delete('/liste-achat/{item}', [ListeAchatController::class, 'destroy'])
+        ->name('listeAchat.destroy');
 });
 
 // Routes d'administration (réservées aux admins)
