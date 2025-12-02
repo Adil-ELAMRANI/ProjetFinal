@@ -142,7 +142,7 @@
 
                     <button 
                         type="button"
-                        class="flex-3 add-to-cellar-btn bg-button-default active:bg-primary-active hover:bg-button-hover animation duration-200 text-white rounded-lg px-4 py-2"
+                        class="flex-2 bg-card border-2 border-primary text-primary font-bold py-1 px-4 rounded-lg hover:bg-button-hover hover:text-white active:bg-primary-active transition-colors duration-300 block text-center"
                         data-bottle-id="{{ $id }}"
                         aria-label="Ajouter {{ $nom }} au cellier"
                     >
