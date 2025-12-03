@@ -18,10 +18,11 @@ class BouteilleCatalogue extends Model
         'nom',
         'id_type_vin',
         'id_pays',
-        'region',
+        'id_region',
         'millesime',
         'prix',
         'url_image',
+        'url_saq',
         'volume',
         'date_import',
     ];
@@ -68,5 +69,10 @@ class BouteilleCatalogue extends Model
     public function typeVin()
     {
         return $this->belongsTo(TypeVin::class, 'id_type_vin');
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'id_region');
     }
 }

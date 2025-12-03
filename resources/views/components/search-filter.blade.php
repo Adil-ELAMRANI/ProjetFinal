@@ -1,6 +1,7 @@
 @props([  
     'pays' => [],
     'types' => [],
+    'regions' => [],
     'millesimes' => [],
     // 'catalogue' par défaut, 'cellier' pour ton écran de cellier
     'mode' => 'catalogue',
@@ -104,6 +105,20 @@
                 @endforeach
             </select>
 
+            {{-- Select pour Région --}}
+            @if(isset($regions) && !empty($regions))
+                <select id="regionFilter" class="border px-5 py-3 rounded-lg" aria-label="Filtrer par région">
+                    <option value="">Toutes les régions</option>
+                    @foreach($regions as $r)
+                        @php
+                            // catalogue = id_region / cellier = texte de la région
+                            $regionValue = $mode === 'cellier' ? $r->nom : $r->id;
+                        @endphp
+                        <option value="{{ $regionValue }}">{{ $r->nom }}</option>
+                    @endforeach
+                </select>
+            @endif
+
             {{-- Inputs pour Prix min / max --}}
             <div class="flex w-full" role="group" aria-label="Plage de prix">
                 <x-input 
@@ -132,7 +147,7 @@
                 <button
                     id="resetFiltersBtn"
                     type="button"
-                    class="flex-1 px-4 py-2 bg-card border border-danger text-danger rounded-lg hover:bg-danger-hover hover:text-white transition"
+                    class="flex-1 px-4 py-2 bg-danger text-white rounded-lg hover:bg-danger-hover hover:text-white transition"
                     aria-label="Réinitialiser tous les filtres"
                 >
                     Réinitialiser
@@ -141,7 +156,7 @@
                 <button
                     id="applyFiltersBtn"
                     type="button"
-                    class="flex-1 px-4 py-2 bg-button-default text-white rounded-lg hover:bg-button-hover transition"
+                    class="flex-1 px-4 py-2 bg-button-default border-2 text-primary border-primary rounded-lg hover:bg-button-hover hover:text-white transition"
                 >
                     Filtrer
                 </button>
