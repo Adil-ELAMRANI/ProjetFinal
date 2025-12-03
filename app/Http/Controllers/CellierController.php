@@ -72,7 +72,7 @@ class CellierController extends Controller
                     ->from('bouteille_catalogue')
                     ->where(function ($q) {
                         $q->whereColumn('bouteille_catalogue.code_saQ', 'bouteilles.code_saq')
-                          ->orWhereColumn('bouteille_catalogue.nom', 'bouteilles.nom');
+                            ->orWhereColumn('bouteille_catalogue.nom', 'bouteilles.nom');
                     })
                     ->join('regions', 'bouteille_catalogue.id_region', '=', 'regions.id')
                     ->where('regions.nom', $request->region);
@@ -120,15 +120,18 @@ class CellierController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+
+
         $celliers = $user->celliers()
             ->withCount('bouteilles')
+            ->withSum('bouteilles as total_bouteilles', 'quantite')
             ->orderBy('nom')
             ->get();
 
         // Vérifier si on doit afficher le tip pour un nouvel utilisateur
         $showWelcomeTip = false;
         $welcomeTipCellierId = null;
-        
+
         if ($celliers->count() === 1) {
             $cellier = $celliers->first();
             if ($cellier->nom === 'Mon cellier' && $cellier->bouteilles_count === 0) {
@@ -373,7 +376,7 @@ class CellierController extends Controller
                 ->with(['typeVin', 'pays', 'region'])
                 ->first();
         }
-        
+
         // Si pas trouvé par code_saq, chercher par nom
         if (!$bouteilleCatalogue) {
             $bouteilleCatalogue = BouteilleCatalogue::where('nom', $bouteille->nom)

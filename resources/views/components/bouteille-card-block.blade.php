@@ -24,7 +24,7 @@
     @if($isCatalogueMode)
     <button 
         type="button"
-        class="absolute top-2 right-2 bg-white/90 hover:bg-white shadow-md 
+        class="flex border border-border-base items-center justify-center absolute top-2 right-2 bg-white/90 hover:bg-white/30 active:bg-white/10 shadow-md 
                p-2 rounded-full transition z-20 add-to-wishlist"
         data-id="{{ $id }}"
         aria-label="Ajouter à la liste d’achat"
