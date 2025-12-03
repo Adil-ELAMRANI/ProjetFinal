@@ -22,7 +22,7 @@
                 {{-- Note : Le composant doit idéalement avoir un role="listitem" en interne --}}
                 <x-cellar-box 
                     :name="$cellier->nom" 
-                    :amount="$cellier->bouteilles_count ?? $cellier->bouteilles->count()" 
+                    :amount="$cellier->total_bouteilles ?? 0" 
                     :id="$cellier->id"
                 />
             {{-- Si vide, affiche un message --}}
