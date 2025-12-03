@@ -93,23 +93,45 @@
     </div>
 
     {{-- Total --}}
-    @if (!$items->isEmpty())
-        <div class="mt-8 text-gray-900">
-            <p class="text-lg md:text-xl">
-                Nombre de bouteilles : 
-                <span class="font-bold">{{ $totalItem }}</span>
-            </p>
-             <p class="text-lg md:text-xl">
-                Prix moyen par bouteille: 
-                <span class="font-bold">{{ number_format($avgPrice, 2, ',', ' ') }} $</span>
-            </p>
-            <p class="text-lg md:text-xl">
-                Total : 
-                <span class="font-bold">{{ number_format($totalPrice, 2, ',', ' ') }} $</span>
-            </p>
-            
+   @if (!$items->isEmpty())
+    <div class="mt-10">
+        <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 md:p-8">
+
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                Résumé de votre liste
+            </h3>
+
+            <div class="grid gap-4 sm:grid-cols-3">
+
+                {{-- Nombre total de bouteilles --}}
+                <div class="flex flex-col items-center justify-center bg-gray-50 rounded-xl py-4 px-3 border border-gray-100">
+                    <span class="text-sm text-gray-500">Nombre de bouteilles</span>
+                    <span class="text-2xl font-bold text-gray-900">
+                        {{ $totalItem }}
+                    </span>
+                </div>
+
+                {{-- Prix moyen --}}
+                <div class="flex flex-col items-center justify-center bg-gray-50 rounded-xl py-4 px-3 border border-gray-100">
+                    <span class="text-sm text-gray-500 whitespace-nowrap">Prix moyen / bouteille</span>
+                    <span class="text-2xl font-bold text-gray-900">
+                        {{ number_format($avgPrice, 2, ',', ' ') }} $
+                    </span>
+                </div>
+
+                {{-- Total --}}
+                <div class="flex flex-col items-center justify-center bg-gray-50 rounded-xl py-4 px-3 border border-gray-100">
+                    <span class="text-sm text-gray-500">Total estimé</span>
+                    <span class="text-2xl font-bold text-gray-900">
+                        {{ number_format($totalPrice, 2, ',', ' ') }} $
+                    </span>
+                </div>
+
+            </div>
+
         </div>
-    @endif
+    </div>
+@endif
 </div>
 
 @endsection
