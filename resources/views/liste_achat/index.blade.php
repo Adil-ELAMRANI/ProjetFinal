@@ -38,14 +38,14 @@
                 {{-- Image --}}
                 <div class="max-h-[160px] bg-gray-200 border-b border-gray-100 flex items-center justify-center 
                             overflow-hidden aspect-3/4 py-3">
-                @if ($b->image)
-                <img src="{{ $b->image }}"
-                    alt="Image {{ $b->nom }}"
-                    class="max-w-[96px] max-h-[160px] object-contain">
+                @if ($b->thumbnail ?? $b->image)
+                    <img src="{{ $b->thumbnail ?? $b->image }}"
+                        alt="Image {{ $b->nom }}"
+                        class="max-w-[96px] max-h-[160px] object-contain">
                 @else
-                <x-dynamic-component
-                    :component="'lucide-wine'"
-                    class="w-7 h-7 text-primary/60" />
+                    <x-dynamic-component
+                        :component="'lucide-wine'"
+                        class="w-7 h-7 text-primary/60" />
                 @endif
             </div>
 
