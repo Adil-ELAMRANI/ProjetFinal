@@ -39,7 +39,7 @@
                     />
 
                 {{-- Image --}}
-                <div class="max-h-[160px] bg-gray-50 border-b border-gray-100 flex items-center justify-center 
+                <div class="max-h-[160px] bg-gray-200 border-b border-gray-100 flex items-center justify-center 
                             overflow-hidden aspect-3/4 py-3">
                     @if ($b->image)
                         <img src="{{ $b->image }}" 
