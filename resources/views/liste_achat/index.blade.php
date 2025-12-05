@@ -86,7 +86,7 @@
                     <p class="text-gray-700">
                         Sous-total :
                         <span class="font-semibold">
-                            {{ number_format($b->prix * $item->quantite, 2, ',', ' ') }} $
+                            {{ number_format((float)($b->prix ?? 0) * (int)($item->quantite ?? 0), 2, ',', ' ') }} $
                         </span>
                     </p>
 

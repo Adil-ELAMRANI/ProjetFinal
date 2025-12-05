@@ -26,8 +26,13 @@ class ListeAchatController extends Controller
             ->with('bouteilleCatalogue')
             ->get();
 
-        $totalPrice = $allItems->sum(fn($item) => $item->bouteilleCatalogue->prix * $item->quantite);
-        $totalItem = $allItems->sum(fn($item) => $item->quantite);
+        $totalPrice = $allItems->sum(function($item) {
+            if (!$item->bouteilleCatalogue) {
+                return 0;
+            }
+            return (float)($item->bouteilleCatalogue->prix ?? 0) * (int)($item->quantite ?? 0);
+        });
+        $totalItem = $allItems->sum(fn($item) => (int)($item->quantite ?? 0));
         $avgPrice = $allItems->count() ? $totalPrice / $allItems->count() : 0;
 
 
@@ -157,6 +162,15 @@ class ListeAchatController extends Controller
     public function update(Request $request, ListeAchat $item)
     {
         $item->update($request->only(['quantite', 'achete']));
+
+        // Si c'est une requête AJAX/JSON, retourner une réponse JSON
+        if ($request->expectsJson() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'quantite' => $item->quantite,
+                'message' => 'Liste mise à jour.'
+            ]);
+        }
 
         return back()->with('success', 'Liste mise à jour.');
     }
