@@ -1,6 +1,6 @@
 # 📚 Service SaqScraper
 
-Le service **SaqScraper** permet d'importer automatiquement le catalogue de produits de la SAQ dans la base de données locale via l'API GraphQL d'Adobe Commerce utilisée par le site web de la SAQ.
+Le service **SaqScraper** permet d'importer automatiquement le catalogue de **vins uniquement** de la SAQ dans la base de données locale via l'API GraphQL d'Adobe Commerce utilisée par le site web de la SAQ. Le service filtre automatiquement les produits pour n'importer que les vins (Rouge, Blanc, Rosé) et les champagnes, excluant les spiritueux et autres produits non-vins.
 
 ## 🏗️ Architecture
 
@@ -21,13 +21,14 @@ Le service utilise l'endpoint GraphQL d'Adobe Commerce (`https://catalog-service
 - Tri par prix décroissant
 - Support des catégories spécifiques via recherche par phrase
 
-**⚠️ Limite de pagination de l'API** : L'API SAQ GraphQL impose une limite de **10 000 produits** maximum par requête de recherche. Lorsque cette limite est atteinte, l'importation s'arrête automatiquement avec le message d'erreur "Pagination is limited to 10000 products". Pour importer l'intégralité du catalogue (~12 600 produits), il faut utiliser des filtres de catégorie pour diviser l'importation en plusieurs requêtes plus petites.
+**⚠️ Limite de pagination de l'API** : L'API SAQ GraphQL impose une limite de **10 000 produits** maximum par requête de recherche. Cependant, comme le service filtre automatiquement pour n'importer que les vins (excluant les spiritueux et autres produits), le nombre total de produits importés reste bien en dessous de cette limite. Cette limitation n'affecte donc pas l'importation complète du catalogue de vins.
 
 ### 2. Traitement des données
 
 Pour chaque produit récupéré, le service :
 - **Extrait les informations principales** : nom, SKU (code SAQ), prix, description
-- **Détermine le type de vin** : Rouge, Blanc, Rosé, Champagne, Spiritueux (basé sur les attributs couleur et identité)
+- **Détermine le type de vin** : Rouge, Blanc, Rosé, Champagne (basé sur les attributs couleur et identité)
+- **Filtre les produits** : **Exclut automatiquement les spiritueux et autres produits non-vins** - seuls les vins (Rouge, Blanc, Rosé) et les champagnes sont importés
 - **Identifie le pays et la région** : À partir des attributs `pays_origine` et `region_origine`
 - **Extrait les métadonnées** : Millésime, volume, images
 - **Télécharge et normalise les images** : 
@@ -96,10 +97,10 @@ Cela créera les tables nécessaires :
 php artisan saq:import
 ```
 
-Cette commande importera tous les produits disponibles du catalogue SAQ avec les paramètres par défaut :
-- Pas de limite sur le nombre de produits
+Cette commande importera tous les **vins** disponibles du catalogue SAQ avec les paramètres par défaut :
+- Pas de limite sur le nombre de produits (seulement les vins sont importés)
 - Délai de 2 secondes entre les requêtes
-- Toutes les catégories
+- Filtrage automatique : seuls les vins (Rouge, Blanc, Rosé) et les champagnes sont importés
 
 ### Options disponibles
 
@@ -124,17 +125,16 @@ php artisan saq:import --categorie=produits/vin-rouge
 - `produits/vin-blanc` → recherche avec la phrase `"vin blanc"`
 - `produits/vin-rose` → recherche avec la phrase `"vin rosé"`
 - `produits/champagne` → recherche avec la phrase `"champagne"`
-- `produits/spiritueux` → recherche avec la phrase `"spiritueux"`
 
 Le filtre `categoryPath` reste à `"produits"` pour toutes les recherches, et la catégorisation est effectuée via la recherche par phrase. Cette approche permet de contourner la limitation de l'API qui retourne 0 produits avec des chemins de catégorie spécifiques.
+
+**Note importante** : Même si vous spécifiez une catégorie comme `produits/spiritueux`, le service filtrera automatiquement les résultats pour n'importer que les vins. Les spiritueux seront exclus du processus d'importation.
 
 Les catégories disponibles incluent :
 - `produits/vin-rouge`
 - `produits/vin-blanc`
 - `produits/vin-rose`
 - `produits/champagne`
-- `produits/spiritueux`
-- etc.
 
 #### Ajuster le délai entre requêtes
 
@@ -177,7 +177,7 @@ Pour chaque bouteille, les informations suivantes sont importées :
 | `code_saQ` | Code SKU unique de la SAQ | `product.sku` |
 | `nom` | Nom complet du produit | `product.name` |
 | `prix` | Prix en dollars canadiens | `product.price_range` |
-| `type_vin` | Type (Rouge, Blanc, Rosé, etc.) | Attributs `couleur` / `identite_produit` |
+| `type_vin` | Type (Rouge, Blanc, Rosé, Champagne uniquement) | Attributs `couleur` / `identite_produit` - Les spiritueux sont exclus |
 | `pays` | Pays d'origine | Attribut `pays_origine` |
 | `region` | Région ou appellation | Attributs `region_origine` / `appellation` |
 | `millesime` | Année de récolte | Attribut `millesime_produit` |
@@ -210,18 +210,19 @@ App\Models\BouteilleCatalogue::join('type_vin', 'bouteille_catalogue.id_type_vin
 
 ## ⚠️ Notes importantes
 
-1. **Limite de pagination de l'API** : L'API SAQ GraphQL impose une limite stricte de **10 000 produits maximum** par requête de recherche. Si vous tentez d'importer tous les produits sans filtre de catégorie (~12 600 produits), l'importation s'arrêtera automatiquement à la page 417 (environ 9 984 produits) avec l'erreur "Pagination is limited to 10000 products". Pour importer l'intégralité du catalogue, vous devez diviser l'importation en plusieurs commandes par catégorie :
+1. **Filtrage automatique des vins** : Le service importe **uniquement les vins** (Rouge, Blanc, Rosé) et les champagnes. Les spiritueux et autres produits non-vins sont automatiquement exclus lors du traitement. Cela garantit que seuls les produits pertinents pour l'application sont importés.
+
+2. **Limite de pagination de l'API** : L'API SAQ GraphQL impose une limite de **10 000 produits maximum** par requête de recherche. Cependant, comme le service filtre automatiquement pour n'importer que les vins, le nombre total de produits importés reste bien en dessous de cette limite. Vous pouvez donc importer l'intégralité du catalogue de vins sans risque d'atteindre cette limite. Si vous souhaitez importer par catégorie spécifique, vous pouvez utiliser :
    ```bash
    php artisan saq:import --categorie=produits/vin-rouge
    php artisan saq:import --categorie=produits/vin-blanc
    php artisan saq:import --categorie=produits/vin-rose
    php artisan saq:import --categorie=produits/champagne
-   php artisan saq:import --categorie=produits/spiritueux
    ```
 
-2. **Respect des limites de l'API** : Utilisez un délai approprié (minimum 2 secondes recommandé) pour éviter d'être bloqué par l'API de la SAQ.
+3. **Respect des limites de l'API** : Utilisez un délai approprié (minimum 2 secondes recommandé) pour éviter d'être bloqué par l'API de la SAQ.
 
-3. **Images** : 
+4. **Images** : 
    - Les images sont téléchargées et stockées localement dans `storage/app/public/products/`
    - Le service normalise automatiquement les URLs (corrige les doublons de domaine, optimise les miniatures)
    - **IMPORTANT** : Assurez-vous que le lien symbolique `storage` est créé pour permettre l'accès public aux images :
@@ -233,17 +234,17 @@ App\Models\BouteilleCatalogue::join('type_vin', 'bouteille_catalogue.id_type_vin
    - Consultez les logs (`storage/logs/laravel.log`) pour diagnostiquer les problèmes de téléchargement d'images
    - **Optimisation** : Les images déjà téléchargées sont ignorées lors des mises à jour pour éviter les téléchargements inutiles
 
-4. **Performance** : L'importation complète du catalogue peut prendre plusieurs heures. Utilisez l'option `--limite` pour tester d'abord.
+5. **Performance** : L'importation complète du catalogue de vins peut prendre plusieurs heures. Utilisez l'option `--limite` pour tester d'abord.
 
-5. **Mises à jour** : Relancer la commande mettra à jour les produits existants (basé sur le `code_saQ`) plutôt que de créer des doublons. Les images existantes ne seront pas re-téléchargées grâce à l'optimisation.
+6. **Mises à jour** : Relancer la commande mettra à jour les produits existants (basé sur le `code_saQ`) plutôt que de créer des doublons. Les images existantes ne seront pas re-téléchargées grâce à l'optimisation.
 
-6. **Erreurs** : Consultez les logs Laravel (`storage/logs/laravel.log`) pour diagnostiquer les problèmes d'importation. Les logs incluent :
+7. **Erreurs** : Consultez les logs Laravel (`storage/logs/laravel.log`) pour diagnostiquer les problèmes d'importation. Les logs incluent :
    - Erreurs de requêtes GraphQL
    - Erreurs de téléchargement d'images (avec URL et contexte)
    - Produits importés avec succès
    - Messages de débogage pour le traitement des images
 
-7. **Affichage des images** : Le modèle `BouteilleCatalogue` inclut un accessor `getImageAttribute()` qui normalise automatiquement les chemins d'images et génère les URLs complètes. Utilisez simplement `$bouteille->image` dans vos vues Blade pour obtenir l'URL formatée prête à l'emploi. L'accessor gère automatiquement la normalisation des chemins (`storage/products/...` → URL complète via `asset()`).
+8. **Affichage des images** : Le modèle `BouteilleCatalogue` inclut un accessor `getImageAttribute()` qui normalise automatiquement les chemins d'images et génère les URLs complètes. Utilisez simplement `$bouteille->image` dans vos vues Blade pour obtenir l'URL formatée prête à l'emploi. L'accessor gère automatiquement la normalisation des chemins (`storage/products/...` → URL complète via `asset()`).
 
 ## 🛠️ Développement
 
@@ -264,10 +265,10 @@ use App\Services\SaqScraper;
 // Créer une instance avec délai de 2 secondes
 $scraper = new SaqScraper(2);
 
-// Importer 10 produits
+// Importer 10 vins (les spiritueux seront automatiquement exclus)
 $nombreImportes = $scraper->importerCatalogue(null, 10, 2);
 
-echo "Produits importés : {$nombreImportes}";
+echo "Vins importés : {$nombreImportes}";
 ```
 
 ### Accéder aux données importées
