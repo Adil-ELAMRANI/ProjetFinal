@@ -55,6 +55,8 @@ if (buttons.length) {
                     } else {
                         display.textContent = oldText;
                     }
+
+                  
                 })
                 .catch((err) => {
                     console.error("Erreur quantité:", err);
@@ -63,3 +65,4 @@ if (buttons.length) {
         });
     });
 }
+
