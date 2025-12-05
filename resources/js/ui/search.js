@@ -117,11 +117,36 @@ function fetchCatalogue(customUrl = baseUrl) {
     fetch(finalUrl)
         .then((res) => res.json())
         .then((data) => {
-            container.innerHTML = data.html; // Remplace les cartes
-            bindPaginationLinks(); // Rebind les liens page=...
-            window.dispatchEvent(new CustomEvent("catalogueReloaded")); // Pour rebrancher d’autres JS
+            if (container) {
+                container.innerHTML = data.html;
+                window.dispatchEvent(new CustomEvent("catalogueReloaded"));
+
+                // Re-bind pagination links pour AJAX
+                bindPaginationLinks();
+
+                // Rebind les boutons wishlist
+                window.dispatchEvent(new CustomEvent("catalogueReloaded"));
+            }
+            
+            // Masquer l'overlay de chargement après le chargement AJAX
+            const overlay = document.getElementById("page-loading-overlay");
+            if (overlay) {
+                overlay.classList.add("hidden");
+                overlay.setAttribute("aria-hidden", "true");
+                overlay.innerHTML = "";
+            }
         })
-        .catch((err) => console.error("Erreur AJAX :", err));
+        .catch((err) => {
+            console.error("Erreur lors du fetch catalogue :", err);
+            
+            // Masquer l'overlay même en cas d'erreur
+            const overlay = document.getElementById("page-loading-overlay");
+            if (overlay) {
+                overlay.classList.add("hidden");
+                overlay.setAttribute("aria-hidden", "true");
+                overlay.innerHTML = "";
+            }
+        });
 }
 
 // Suggestions recherche
