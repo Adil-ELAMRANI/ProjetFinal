@@ -189,8 +189,8 @@
                         toast.style.bottom = (window.innerHeight - btnRect.bottom) + 'px';
                         toast.style.right = calculatedRight + 'px';
                     } else {
-                        // Fallback: bas à droite
-                        toast.style.bottom = '20px';
+                        // Fallback: bas à droite (au-dessus de la nav)
+                        toast.style.bottom = '128px';
                         toast.style.right = '20px';
                     }
                     

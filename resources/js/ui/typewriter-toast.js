@@ -81,7 +81,7 @@ window.showTypewriterToast = function(message, options = {}) {
         const existingToasts = container.querySelectorAll('.typewriter-toast-item');
         existingToasts.forEach((existingToast, index) => {
             if (existingToast !== toast && existingToast.style.bottom) {
-                const currentBottom = parseInt(existingToast.style.bottom) || 20;
+                const currentBottom = parseInt(existingToast.style.bottom) || 128;
                 existingToast.style.bottom = `${currentBottom + 80}px`;
             }
         });
@@ -153,7 +153,7 @@ window.showTypewriterToast = function(message, options = {}) {
                             const remainingToasts = container.querySelectorAll('.typewriter-toast-item');
                             remainingToasts.forEach((remainingToast, idx) => {
                                 if (remainingToast.style.bottom) {
-                                    remainingToast.style.bottom = `${20 + idx * 80}px`;
+                                    remainingToast.style.bottom = `${128 + idx * 80}px`;
                                 }
                             });
                         }
@@ -218,17 +218,17 @@ function applyPosition(element, position) {
                 element.style.right = '20px';
                 break;
             case 'bottom-left':
-                element.style.bottom = '20px';
+                element.style.bottom = '128px';
                 element.style.left = '20px';
                 break;
             case 'bottom-center':
-                element.style.bottom = '20px';
+                element.style.bottom = '128px';
                 element.style.left = '50%';
                 element.style.transform = 'translateX(-50%)';
                 break;
             case 'bottom-right':
             default:
-                element.style.bottom = '20px';
+                element.style.bottom = '128px';
                 element.style.right = '20px';
                 break;
             case 'center':
