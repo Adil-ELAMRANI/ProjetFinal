@@ -299,6 +299,11 @@ if (boutonFermer && panneauCellier) {
             }
         }
 
+        const dataUpdated = await obtenirCelliers();
+        celliersPrecharges = dataUpdated;
+
+        peuplerOptionsCelliers(celliersPrecharges);
+
         // Fermer le panneau une fois l'opération terminée
         fermerPanneau();
     });
