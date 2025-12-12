@@ -175,8 +175,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateCharts(values) {
-        const perUser   = values.per_user   || [];
-        const perCellar = values.per_cellar || [];
+        const allPerUser   = values.per_user   || [];
+        const allPerCellar = values.per_cellar || [];
+
+        const perUser = allPerUser
+        .slice() 
+        .sort((a, b) => (b.total_value ?? 0) - (a.total_value ?? 0)) // tri décroissant
+        .slice(0, 3);
+
+        const perCellar = allPerCellar
+        .slice()
+        .sort((a, b) => (b.total_value ?? 0) - (a.total_value ?? 0))
+        .slice(0, 3);
 
         // Graphique par usager
         if (usersChart) {
@@ -193,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data: {
                     labels,
                     datasets: [{
-                        label: 'Valeur par usager',
+                        label: 'Top 3 usagers (valeur)',
                         data
                     }]
                 },
@@ -224,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data: {
                     labels,
                     datasets: [{
-                        label: 'Valeur par cellier',
+                        label: 'Top 3 celliers (valeur)',
                         data
                     }]
                 },
