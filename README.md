@@ -108,13 +108,11 @@ php artisan saq:import --limite=10
 - Disparition automatique après 2.5 secondes
 - Support de plusieurs toasts simultanés
 
-## 🔗 Liens utiles
-🎨 Maquettes Figma
+🔗 Liens et ressources
 
-📘 Jira – Scrum / Backlog
-
-💾 Dépôt GitHub                               |
-
+🌐 Site en ligne : Voir sur WebDev
+🗂 Jira – Backlog et sprints : [Voir sur Jira](https
+🎨 Maquettes Figma : Accéder aux maquettes
 
 ---
 
